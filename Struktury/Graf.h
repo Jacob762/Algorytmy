@@ -8,16 +8,14 @@
 #include <iostream>
 #include "Kopiec/kopiec.h"
 #include "Lista/lista.h"
+#include "Slist/nList.h"
+#include "node.h"
 // nie da sie includowac dwoch list roznych niewiadomo czemu XD
 
 using namespace std;
 
     class Graf {
     public:
-        struct listElement{
-            listElement *next;
-            int des, waga;
-        };
         kopiec Q;
         bool *S;
         int *koszt;
@@ -25,15 +23,15 @@ using namespace std;
         int rozmiar;
         int **grafMacierz;
         int **temp;
-        listElement **grafLista;
         lista *list;
         lista *listp;
+        nList *nLis;
         Graf();
-        Graf(char struktura);
-        void init_macierz();
-        void init_lista();
+        Graf(char struktura, string nazwa);
+        void init_macierz(string nazwa);
+        void init_lista(string nazwa);
         void dodajMacierz(string nazwa);
-        void dodajLista();
+
         void dodajMacierzFord(string nazwa);
         void pokaz();
         void poszerzMacierz(int wielkosc);
@@ -44,6 +42,8 @@ using namespace std;
         void dodajMacierzPrima(string nazwa);
 
         void dodajListaPrim(string nazwa);
+
+        void getLista();
     };
 
 

@@ -6,36 +6,36 @@
 #include <iostream>
 #include <fstream>
 
+
 using namespace std;
 
     Graf::Graf() {
 
     }
 
-    Graf::Graf(char struktura){
+    Graf::Graf(char struktura, string nazwa){
         rozmiar = 1;
         switch(struktura){
             case 'm':
-                init_macierz();
+                init_macierz(nazwa);
                 break;
             case 'l':
-                init_lista();
+                init_lista(nazwa);
                 break;
             case 'k':
-                dodajMacierzPrima("plik.txt");
+                dodajMacierzPrima(nazwa);
                 break;
             case 'n':
-                dodajListaPrim("plik.txt");
+                dodajListaPrim(nazwa);
                 break;
             case 'f':
-                dodajMacierzFord("plik.txt");
+                dodajMacierzFord(nazwa);
                 break;
         }
     }
 
-    void Graf::init_macierz() {
-        dodajMacierz("plik.txt");
-        pokaz();
+    void Graf::init_macierz(string nazwa) {
+        dodajMacierz(nazwa);
         cout<<endl<<endl;
         for(int i=0;i<rozmiar;i++){
             for(int j=0;j<rozmiar;j++){
@@ -61,7 +61,7 @@ using namespace std;
             for(int j=0;j<rozmiar;j++) grafMacierz[i][j] = -1;
         }
         while(file >> x >> y >> val){
-            grafMacierz[x][y] = val;
+            if(grafMacierz[x][y]==-1) grafMacierz[x][y] = val;
         }
     }
 
@@ -80,7 +80,7 @@ using namespace std;
             for(int j=0;j<rozmiar;j++) grafMacierz[i][j] = INT_MAX;
         }
         while(file >> x >> y >> val){
-            grafMacierz[x][y] = val;
+            if(grafMacierz[x][y]==INT_MAX) grafMacierz[x][y] = val;
         }
     }
 
@@ -95,12 +95,8 @@ using namespace std;
         }
 
     }
-    void Graf::init_lista() {
-        dodajLista("plik.txt");
-        for(int i=0;i<rozmiar;i++){
-            cout<<i<<"\t";
-            list[i].pokaz();
-        }
+    void Graf::init_lista(string nazwa) {
+        dodajLista(nazwa);
         cout<<endl<<endl;
         listaElement* temp;
         listaElement* temp2;
@@ -133,6 +129,7 @@ using namespace std;
     }
 
     void Graf::dodajLista(string nazwa) {
+        bool powtorka = false;
         int x,y,val;
         fstream file(nazwa,std::ios_base::in);
         if (!file.is_open()) {
@@ -141,16 +138,36 @@ using namespace std;
         }
         file >> x >> y;
         rozmiar = x;
+        listaElement *tempp;
+        node *temp2;
         list = new lista [rozmiar];
         listp = new lista [rozmiar];
+        nLis = new nList[rozmiar];
         for(int i=0;i<rozmiar;i++) list[i] = lista();
+        for(int i=0;i<rozmiar;i++) nLis[i] = nList();
+        for(int i=0;i<rozmiar;i++) listp[i] = lista();
         while(file >> x >> y >> val){
-            list[x].dodajNaKoniec(new listaElement(y));
-            listp[x].dodajNaKoniec(new listaElement(val));
+            tempp = list[x].head;
+            temp2 = nLis[x].head;
+            while(tempp!=NULL){
+                if(tempp->data==y) powtorka = true;
+                tempp = tempp->nextEl;
+            }
+            while(temp2!=NULL){
+                if(temp2->next==y) powtorka = true;
+                temp2 = temp2->nextEl;
+            }
+            if(!powtorka){
+                list[x].dodajNaKoniec(new listaElement(y));
+                listp[x].dodajNaKoniec(new listaElement(val));
+                nLis[x].dodajNaKoniec(new node(x,y,val));
+            }
+            powtorka = false;
         }
     }
 
     void Graf::dodajListaPrim(string nazwa) {
+        bool powtorka = false;
         int x,y,val;
         fstream file(nazwa,std::ios_base::in);
         if (!file.is_open()) {
@@ -161,12 +178,32 @@ using namespace std;
         rozmiar = x;
         list = new lista [rozmiar];
         listp = new lista [rozmiar];
+        nLis = new nList[rozmiar];
+        listaElement *tempp;
+        node *temp2;
         for(int i=0;i<rozmiar;i++) list[i] = lista();
+        for(int i=0;i<rozmiar;i++) nLis[i] = nList();
+        for(int i=0;i<rozmiar;i++) listp[i] = lista();
         while(file >> x >> y >> val){
-            list[x].dodajNaKoniec(new listaElement(y));
-            listp[x].dodajNaKoniec(new listaElement(val));
-            list[y].dodajNaKoniec(new listaElement(x));
-            listp[y].dodajNaKoniec(new listaElement(val));
+            tempp = list[x].head;
+            temp2 = nLis[x].head;
+            while(tempp!=NULL){
+                if(tempp->data==y) powtorka = true;
+                tempp = tempp->nextEl;
+            }
+            while(temp2!=NULL){
+                if(temp2->next==y) powtorka = true;
+                temp2 = temp2->nextEl;
+            }
+            if(!powtorka){
+                list[x].dodajNaKoniec(new listaElement(y));
+                listp[x].dodajNaKoniec(new listaElement(val));
+                list[y].dodajNaKoniec(new listaElement(x));
+                listp[y].dodajNaKoniec(new listaElement(val));
+                nLis[x].dodajNaKoniec(new node(x,y,val));
+                nLis[y].dodajNaKoniec(new node(y,x,val));
+            }
+            powtorka = false;
         }
     }
 
@@ -185,7 +222,24 @@ using namespace std;
             for(int j=0;j<rozmiar;j++) grafMacierz[i][j] = -1;
         }
         while(file >> x >> y >> val){
-            grafMacierz[x][y] = val;
-            grafMacierz[y][x] = val;
+            if(grafMacierz[x][y] == -1){
+                grafMacierz[x][y] = val;
+                grafMacierz[y][x] = val;
+            }
+
+        }
+    }
+
+    void Graf::getLista(){
+        listaElement *tmp;
+        node *tm;
+        for(int i=0;i<rozmiar;i++){
+            tm = nLis[i].head;
+            cout<<i<<"\t";
+            while(tm!=NULL){
+                cout<<tm->next<<" : "<<tm->val<<"  ";
+                tm = tm->nextEl;
+            }
+            cout<<endl;
         }
     }

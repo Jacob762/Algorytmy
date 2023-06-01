@@ -21,7 +21,7 @@ namespace std {
             int next;
             int val;
         };
-        Dijkstra();
+        Dijkstra(int choice, int st, string nazwa);
         Graf graf;
         void zdijkstruj(int start);
         int *drogi;

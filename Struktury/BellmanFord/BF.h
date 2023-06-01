@@ -7,30 +7,27 @@
 #include <iostream>
 #include "../Kopiec/kopiec.h"
 #include "../Graf.h"
-
+#include "../Slist/nList.h"
+#include "../node.h"
 
 namespace std {
 
     class BF {
     public:
-        struct node{
-            int id;
-            int next;
-            int val;
-        };
-        BF();
+        BF(int choice, int st,string nazwa);
         Graf graf;
-        //listaNode *listaNode;
+        nList *lista;
         bool zfordujMacierz(int start);
         int *drogi;
         bool *odwiedzoned;
         int *poprzednicy;
-        node *kolejka;
         void wyswietl();
         void zaladujListe(string nazwa);
         void poprawMacierz();
-
+        int rozmiarL;
         bool zfordujListe(int start);
+        nList* pop;
+        void getLista();
     };
 
 } // std

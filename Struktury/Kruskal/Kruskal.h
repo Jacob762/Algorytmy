@@ -9,14 +9,12 @@
 #include "../Kopiec/kopiec.h"
 #include "../Lista/lista.h"
 #include "../Graf.h"
+#include "../node.h"
+#include "../Slist/nList.h"
 
 class Kruskal {
 public:
-    struct node{
-        int id;
-        int next;
-        int val;
-    };
+
     Graf graf;
     void zkruskaluj(int start);
     int *stopien;
@@ -25,8 +23,8 @@ public:
     int *poprzednicy;
     void wyswietl();
     kopiec kolejka;
-    Kruskal();
-
+    Kruskal(int choice, int st,string nazwa);
+    nList list;
     void init_zbiory();
 
     int znajdzDowodce(int liczba);

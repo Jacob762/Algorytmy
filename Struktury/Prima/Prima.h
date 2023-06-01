@@ -9,16 +9,15 @@
 #include "../Kopiec/kopiec.h"
 #include "../Lista/lista.h"
 #include "../Graf.h"
+#include "../node.h"
+#include "../Slist/nList.h"
 
 namespace std {
 
     class Prima {
     public:
-        struct node{
-            int id;
-            int next;
-            int val;
-        };
+
+
         Graf graf;
         void zprimujMacierz(int start);
         int *drogi;
@@ -26,8 +25,8 @@ namespace std {
         int *poprzednicy;
         void wyswietl();
         kopiec kolejka;
-
-        Prima();
+        nList list;
+        Prima(int choice, int st,string nazwa);
 
         void zprimujListe(int start);
     };

@@ -6,10 +6,27 @@
 
 namespace std {
 
-    Prima::Prima() {
-        graf = Graf('n');
-        //zprimujMacierz(5);
-        zprimujListe(5);
+    Prima::Prima(int choice, int st, string nazwa) {
+        switch (choice) {
+            case 0:
+                graf = Graf('n',nazwa);
+                graf.getLista();
+                break;
+            case 1:
+                graf = Graf('k',nazwa);
+                graf.pokaz();
+                break;
+        }
+        list = nList();
+        graf = Graf('n',nazwa);
+        cout<<endl;
+        zprimujListe(st);
+        wyswietl();
+        cout<<endl;
+        graf = Graf('k',nazwa);
+        cout<<endl;
+        zprimujMacierz(st);
+        wyswietl();
     }
 
     void Prima::zprimujMacierz(int start) {
@@ -31,6 +48,7 @@ namespace std {
                 if(!odwiedzoned[kolejka.table[0].next]){
                     wynik+=kolejka.table[0].val;
                     m = kolejka.table[0].next;
+                    list.dodajNaKoniec(new node(kolejka.table[0].id,kolejka.table[0].next, kolejka.table[0].val));
                     kolejka.usunKorzen();
                     break;
                 } else{
@@ -50,22 +68,21 @@ namespace std {
         for(int i=0;i<rozmiar;i++) odwiedzoned[i] = false;
         int wynik = 0;
         int m = start;
-        listaElement *temp, *temp2;
+        node *tmp;
         while(ik<rozmiar-1){
             odwiedzoned[m] = true;
-            temp = graf.list[m].head;
-            temp2 = graf.listp[m].head;
-                while(temp!=NULL){
-                    if(!odwiedzoned[temp->data]){
-                        kolejka.dodaj(temp2->data,m,temp->data);
+            tmp = graf.nLis[m].head;
+                while(tmp!=NULL){
+                    if(!odwiedzoned[tmp->next]){
+                        kolejka.dodaj(tmp->val,m,tmp->next);
                     }
-                    temp = temp->nextEl;
-                    temp2 = temp2->nextEl;
+                    tmp = tmp->nextEl;
                 }
             while(true){
                 if(!odwiedzoned[kolejka.table[0].next]){
                     wynik+=kolejka.table[0].val;
                     m = kolejka.table[0].next;
+                    list.dodajNaKoniec(new node(kolejka.table[0].id,kolejka.table[0].next, kolejka.table[0].val));
                     kolejka.usunKorzen();
                     break;
                 } else{
@@ -78,6 +95,14 @@ namespace std {
     }
 
     void Prima::wyswietl() {
-
+        node* temp;
+        temp = list.head;
+        cout<<endl;
+        cout<<"id"<<"  "<<"next"<<"  "<<"val"<<endl;
+        while (temp!=NULL){
+            cout<<temp->id<<"    "<<temp->next<<"    "<<temp->val<<endl;
+            temp = temp->nextEl;
+        }
+        while(list.head!=NULL) list.usunZPoczatku();
     }
 } // std

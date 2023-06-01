@@ -6,9 +6,21 @@
 
 namespace std {
 
-    Dijkstra::Dijkstra(){
-        graf = Graf('l');
-        zdijkstruj(0);
+    Dijkstra::Dijkstra(int choice, int st, string nazwa){
+        switch (choice) {
+            case 0:
+                graf = Graf('l',nazwa);
+                graf.getLista();
+                break;
+            case 1:
+                graf = Graf('m',nazwa);
+                graf.pokaz();
+                break;
+        }
+        graf = Graf('l',nazwa);
+        zdijkstruj(st);
+        graf = Graf('m',nazwa);
+        zdijkstruj(st);
     }
 
     void Dijkstra::zdijkstruj(int start){
@@ -49,6 +61,7 @@ namespace std {
                 }
             }
             j++;
+            if(ktoNastepny.head==NULL) break;
             current = ktoNastepny.head->data;
             ktoNastepny.usunZPoczatku();
         }

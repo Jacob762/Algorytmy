@@ -6,22 +6,40 @@
 
 using namespace std;
 
-    Kruskal::Kruskal() {
-        graf = Graf('n');
+    Kruskal::Kruskal(int choice, int st, string nazwa) {
+        switch (choice) {
+            case 0:
+                graf = Graf('n',nazwa);
+                graf.getLista();
+                break;
+            case 1:
+                graf = Graf('k',nazwa);
+                graf.pokaz();
+                break;
+        }
+        list = nList();
+        cout<<endl;
+        graf = Graf('n',nazwa);
+        init_kolejkaL();
         size = graf.rozmiar;
-        zkruskaluj(5);
+        zkruskaluj(st);
+        wyswietl();
+        graf = Graf('k',nazwa);
+        init_kolejkaM();
+        size = graf.rozmiar;
+        zkruskaluj(st);
+        wyswietl();
     }
 
     void Kruskal::zkruskaluj(int start) {
         int wynik = 0;
         init_zbiory();
-        init_kolejkaL();
-        //init_kolejkaM();
         int roz = kolejka.rozmiar;
         for(int krawedz = 0;krawedz<roz;krawedz++){
             if(znajdzDowodce(kolejka.table[0].id)!= znajdzDowodce(kolejka.table[0].next)){
                 przypiszDowodce(kolejka.table[0].id,kolejka.table[0].next);
                 wynik+=kolejka.table[0].val;
+                list.dodajNaKoniec(new node(kolejka.table[0].id,kolejka.table[0].next, kolejka.table[0].val));
             }
             kolejka.usunKorzen();
         }
@@ -78,3 +96,15 @@ using namespace std;
             }
         }
     }
+
+void Kruskal::wyswietl() {
+    node* temp;
+    temp = list.head;
+    cout<<endl;
+    cout<<"id"<<"  "<<"next"<<"  "<<"val"<<endl;
+    while (temp!=NULL){
+        cout<<temp->id<<"    "<<temp->next<<"    "<<temp->val<<endl;
+        temp = temp->nextEl;
+    }
+    while(list.head!=NULL) list.usunZPoczatku();
+}
