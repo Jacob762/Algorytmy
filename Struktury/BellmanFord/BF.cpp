@@ -39,7 +39,6 @@ namespace std {
                 poprzednicy[i] = -1;
             }
         }
-        int spec = start;
         for(int i=1;i<graf.rozmiar;i++){
             res = true;
             for(int j=0;j<graf.rozmiar;j++){
@@ -48,10 +47,9 @@ namespace std {
                         if(drogi[k]<=drogi[j]+graf.grafMacierz[j][k]) continue;
                         res = false;
                         drogi[k]=drogi[j]+graf.grafMacierz[j][k];
-                        poprzednicy[k] = spec;
+                        poprzednicy[k] = j;
                     }
                 }
-                if(spec==graf.rozmiar) spec=0;
             }
             if(res) return true;
         }
@@ -127,7 +125,6 @@ namespace std {
                 poprzednicy[i] = -1;
             }
         }
-        int spec = start;
         for(int i=1;i<rozmiarL;i++){
             res = true;
             for(int j=0;j<rozmiarL;j++){
@@ -140,11 +137,10 @@ namespace std {
                         }
                         res = false;
                         drogi[temp->next] = drogi[j]+temp->val;
-                        poprzednicy[temp->next] = spec;
+                        poprzednicy[temp->next] = j;
                     }
                     temp = temp->nextEl;
                 }
-                if(spec==graf.rozmiar) spec=0;
             }
             if(res) return true;
         }

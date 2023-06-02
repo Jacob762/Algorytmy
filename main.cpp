@@ -8,7 +8,7 @@
 #include "Struktury/Slist/nList.h"
 
 void menu();
-void wygenerujGraf(int nody, int krawedzie);
+void wygenerujGraf(int nody, int krawedzie,float zageszczenie);
 
 int main() {
     menu();
@@ -16,7 +16,8 @@ int main() {
 }
 
 void menu(){
-    wygenerujGraf(8,15);
+    ::srand(time(NULL));
+    wygenerujGraf(5,5,0.2);
     int start;
     int wybor;
     string nazwa;
@@ -86,8 +87,10 @@ void menu(){
     }
 }
 
-void wygenerujGraf(int nody, int krawedzie){  //trzeba napisac dokladniejszy generator
-    ::srand(time(NULL));
+void wygenerujGraf(int nody, int krawedzie, float zageszczenie){
+    bool *tabOd = new bool [nody];
+    int wyjscia = floor(zageszczenie*nody);
+    for(int i=0;i<nody;i++) tabOd[i]= false;
     ofstream file("plik.txt", ios::out);
     if (!file.is_open()) {
         cout<<"ERROR"<<endl;
@@ -95,12 +98,24 @@ void wygenerujGraf(int nody, int krawedzie){  //trzeba napisac dokladniejszy gen
     }
     int x,y,z;
     file<<nody<<" "<<krawedzie<<endl;
-    for(int i=0;i<krawedzie;i++){
-        x = rand()%nody;
-        y = rand()%nody;
-        while(x==y) y = rand()%nody;
-        z = rand()%20+1;
-        file<<x<<" "<<y<<" "<<z<<endl;
+    for(int i=0;i<nody;i++){
+        x = i;
+        tabOd[x] = true;
+        for(int j=0;j<wyjscia;j++) {
+            y = rand()%nody;
+            if(tabOd[y]){
+                while(true) {
+                    if(tabOd[y]||y==x){
+                        y = rand()%nody;
+                    } else break;
+                }
+            }
+            tabOd[y] = true;
+            z = rand()%20+1;
+            file<<x<<" "<<y<<" "<<z<<endl;
+        }
+        for(int k=0;k<nody;k++) tabOd[k]= false;
     }
     file.close();
+
 }
