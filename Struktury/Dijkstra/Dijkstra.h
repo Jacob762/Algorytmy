@@ -10,25 +10,21 @@
 #include "../Lista/lista.h"
 #include "../Graf.h"
 #include "../Lista/listaElement.h"
-
+#include "../node.h"
 
 namespace std {
 
     class Dijkstra {
     public:
-        struct node{
-            int id;
-            int next;
-            int val;
-        };
         Dijkstra(int choice, int st, string nazwa);
         Graf graf;
-        void zdijkstruj(int start);
+        void zdijkstrujMacierz(int start);
+        void zdijkstrujListe(int start);
         int *drogi;
         bool *odwiedzoned;
         int *poprzednicy;
-        node *kolejka;
         void wyswietl();
+        kopiec que;
     };
 
 } // std

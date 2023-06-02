@@ -17,10 +17,10 @@ using namespace std;
         rozmiar = 1;
         switch(struktura){
             case 'm':
-                init_macierz(nazwa);
+                dodajMacierz(nazwa);
                 break;
             case 'l':
-                init_lista(nazwa);
+                dodajLista(nazwa);
                 break;
             case 'k':
                 dodajMacierzPrima(nazwa);
@@ -100,13 +100,12 @@ using namespace std;
         cout<<endl<<endl;
         listaElement* temp;
         listaElement* temp2;
+        node* tempp;
         for(int i=0;i<rozmiar;i++){
-            temp = list[i].head;
-            temp2 = listp[i].head;
-            while(temp!=NULL){
-                Q.dodaj(temp2->data,i,temp->data);
-                temp = temp->nextEl;
-                temp2 = temp2->nextEl;
+            tempp = nLis[i].head;
+            while(tempp!=NULL){
+                Q.dodaj(tempp->val,i,tempp->next);
+                tempp = tempp->nextEl;
             }
         }
     }
@@ -140,26 +139,16 @@ using namespace std;
         rozmiar = x;
         listaElement *tempp;
         node *temp2;
-        list = new lista [rozmiar];
-        listp = new lista [rozmiar];
+
         nLis = new nList[rozmiar];
-        for(int i=0;i<rozmiar;i++) list[i] = lista();
         for(int i=0;i<rozmiar;i++) nLis[i] = nList();
-        for(int i=0;i<rozmiar;i++) listp[i] = lista();
         while(file >> x >> y >> val){
-            tempp = list[x].head;
             temp2 = nLis[x].head;
-            while(tempp!=NULL){
-                if(tempp->data==y) powtorka = true;
-                tempp = tempp->nextEl;
-            }
             while(temp2!=NULL){
                 if(temp2->next==y) powtorka = true;
                 temp2 = temp2->nextEl;
             }
             if(!powtorka){
-                list[x].dodajNaKoniec(new listaElement(y));
-                listp[x].dodajNaKoniec(new listaElement(val));
                 nLis[x].dodajNaKoniec(new node(x,y,val));
             }
             powtorka = false;

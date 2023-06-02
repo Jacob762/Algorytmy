@@ -18,26 +18,18 @@ namespace std {
                 break;
         }
         graf = Graf('l',nazwa);
-        zdijkstruj(st);
+        zdijkstrujListe(st);
+        cout<<endl;
         graf = Graf('m',nazwa);
-        zdijkstruj(st);
+        zdijkstrujMacierz(st);
     }
 
-    void Dijkstra::zdijkstruj(int start){
-        int rozmiarKolejki = graf.Q.rozmiar;
+    void Dijkstra::zdijkstrujMacierz(int start){
         drogi = new int [graf.rozmiar];
         odwiedzoned = new bool [graf.rozmiar];
         poprzednicy = new int [graf.rozmiar];
-        kolejka = new node [graf.Q.rozmiar];
-        lista ktoNastepny = lista();
-        int current = start;
-        int j = 0;
-        for(int i=0;i<rozmiarKolejki;i++){
-            kolejka[i].val = graf.Q.table[0].val;
-            kolejka[i].id = graf.Q.table[0].id;
-            kolejka[i].next = graf.Q.table[0].next;
-            graf.Q.usunKorzen();
-        }
+        que = kopiec();
+        int current;
         for(int i=0;i<graf.rozmiar;i++){
             if(i!=start){
                 drogi[i] = INT_MAX;
@@ -49,27 +41,66 @@ namespace std {
                 poprzednicy[i] = -1;
             }
         }
-        while(j<graf.rozmiar){
+        que.dodaj(drogi[start],start,0);
+        while(que.rozmiar!=0){
+            current = que.table[0].id;
+            que.usunKorzen();
             odwiedzoned[current] = true;
-            for(int i=0;i<rozmiarKolejki;i++){
-                if(kolejka[i].id == current && !odwiedzoned[kolejka[i].next]){
-                    ktoNastepny.dodajNaKoniec(new listaElement(kolejka[i].next));
-                    if(drogi[kolejka[i].next]>drogi[kolejka[i].id]+kolejka[i].val){
-                        poprzednicy[kolejka[i].next] = kolejka[i].id;
-                        drogi[kolejka[i].next] = drogi[kolejka[i].id]+kolejka[i].val;
-                    }
+            for(int i=0;i<graf.rozmiar;i++) {
+                if (drogi[i] > drogi[current] + graf.grafMacierz[current][i] && !odwiedzoned[i] && graf.grafMacierz[current][i]!=-1) {
+                    poprzednicy[i] = current;
+                    drogi[i] = drogi[current] + graf.grafMacierz[current][i];
                 }
             }
-            j++;
-            if(ktoNastepny.head==NULL) break;
-            current = ktoNastepny.head->data;
-            ktoNastepny.usunZPoczatku();
+            for(int i=0;i<graf.rozmiar;i++){
+                if(drogi[i]!=INT_MAX&&!odwiedzoned[i]) que.dodaj(drogi[i],i,0);
+            }
         }
         wyswietl();
         delete [] drogi;
         delete [] odwiedzoned;
         delete [] poprzednicy;
-        delete [] kolejka;
+    }
+
+    void Dijkstra::zdijkstrujListe(int start){
+        drogi = new int [graf.rozmiar];
+        odwiedzoned = new bool [graf.rozmiar];
+        poprzednicy = new int [graf.rozmiar];
+        que = kopiec();
+        node *temp;
+        int current;
+        for(int i=0;i<graf.rozmiar;i++){
+            if(i!=start){
+                drogi[i] = INT_MAX;
+                odwiedzoned[i] = false;
+                poprzednicy[i] = -1;
+            } else{
+                drogi[i] = 0;
+                odwiedzoned[i] = true;
+                poprzednicy[i] = -1;
+            }
+        }
+        que.dodaj(drogi[start],start,0);
+        while(que.rozmiar!=0){
+            current = que.table[0].id;
+            que.usunKorzen();
+            odwiedzoned[current] = true;
+            temp = graf.nLis[current].head;
+            while(temp!=NULL) {
+                if (drogi[temp->next] > drogi[current] + temp->val && !odwiedzoned[temp->next]) {
+                    poprzednicy[temp->next] = current;
+                    drogi[temp->next] = drogi[current] + temp->val;
+                }
+                temp = temp->nextEl;
+            }
+            for(int i=0;i<graf.rozmiar;i++){
+                if(drogi[i]!=INT_MAX&&!odwiedzoned[i]) que.dodaj(drogi[i],i,0);
+            }
+        }
+        wyswietl();
+        delete [] drogi;
+        delete [] odwiedzoned;
+        delete [] poprzednicy;
     }
 
     void Dijkstra::wyswietl(){

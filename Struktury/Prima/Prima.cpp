@@ -53,6 +53,7 @@ namespace std {
                     break;
                 } else{
                     kolejka.usunKorzen();
+                    if(kolejka.rozmiar==0) break;
                 }
             }
             ik++;
@@ -87,6 +88,7 @@ namespace std {
                     break;
                 } else{
                     kolejka.usunKorzen();
+                    if(kolejka.rozmiar==0) break;
                 }
             }
             ik++;
