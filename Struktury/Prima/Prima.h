@@ -29,6 +29,8 @@ namespace std {
         Prima(int choice, int st,string nazwa);
 
         void zprimujListe(int start);
+
+        void zprimujMacierzI(int start);
     };
 
 } // std

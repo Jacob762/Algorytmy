@@ -28,6 +28,8 @@ namespace std {
         bool zfordujListe(int start);
         nList* pop;
         void getLista();
+
+        bool zfordujMacierzI(int start);
     };
 
 } // std

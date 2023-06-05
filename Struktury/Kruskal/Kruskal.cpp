@@ -87,11 +87,20 @@ using namespace std;
     }
 
     void Kruskal::init_kolejkaM(){
+        int *odw = new int[graf.wierz];
+        for(int i=0;i<graf.wierz;i++) odw[i] = false;
         kolejka = kopiec();
         for(int i=0;i<graf.rozmiar;i++){
-            for(int j=0;j<graf.rozmiar;j++){
-                if(graf.grafMacierz[i][j]!=-1){
-                    kolejka.dodaj(graf.grafMacierz[i][j],i,j);
+            for(int j=0;j<graf.wierz;j++){
+                if(graf.macInc[i][j]==1&&!odw[j]){
+                    odw[j]=true;
+                    for(int k=0;k<graf.rozmiar;k++) {
+                        if(k==i) continue;
+                        if (graf.macInc[k][j]==1){
+                            kolejka.dodaj(graf.wart[j],i,k);
+                            break;
+                        }
+                    }
                 }
             }
         }

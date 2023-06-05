@@ -17,13 +17,13 @@ using namespace std;
         rozmiar = 1;
         switch(struktura){
             case 'm':
-                dodajMacierz(nazwa);
+                dodajMacierzI(nazwa);
                 break;
             case 'l':
                 dodajLista(nazwa);
                 break;
             case 'k':
-                dodajMacierzPrima(nazwa);
+                dodajMacierzPrimaI(nazwa);
                 break;
             case 'n':
                 dodajListaPrim(nazwa);
@@ -64,6 +64,34 @@ using namespace std;
             if(grafMacierz[x][y]==-1) grafMacierz[x][y] = val;
         }
     }
+    void Graf::dodajMacierzI(string nazwa) {
+        int x,y,val;
+        int ind = 0;
+
+        fstream file(nazwa,std::ios_base::in);
+        if (!file.is_open()) {
+            cout<<"ERROR"<<endl;
+            return;
+        }
+        file >> x >> y;
+        rozmiar = x;
+        wierz = y;
+        wart = new int[wierz];
+        macInc = new int*[rozmiar];
+        for(int i=0;i<rozmiar;i++){
+            macInc[i] = new int [y];
+            for(int j=0;j<rozmiar;j++) macInc[i][j] = 0;
+        }
+        while(file >> x >> y >> val){
+
+                macInc[x][ind] = 1;
+                macInc[y][ind] = -1;
+                wart[ind] = val;
+                ind++;
+
+
+        }
+    }
 
     void Graf::dodajMacierzFord(string nazwa){
         int x,y,val;
@@ -86,15 +114,21 @@ using namespace std;
 
     void Graf::pokaz() {
         cout<<"   ";
-        for(int i=0;i<rozmiar;i++) cout<<i<<"  ";
+        for(int i=0;i<wierz;i++) cout<<i<<"  ";
         cout<<endl;
         for(int i=0;i<rozmiar;i++){
             cout<<i<<"  ";
-            for(int j=0;j<rozmiar;j++) cout<<grafMacierz[i][j]<<" ";
+            for(int j=0;j<wierz;j++) cout<<macInc[i][j]<<"  ";
             cout<<endl;
         }
-
+        cout<<endl;
+        cout<<"   ";
+        for(int i=0;i<wierz;i++){
+            cout<<wart[i]<<"  ";
+        }
+        cout<<"\n\n";
     }
+
     void Graf::init_lista(string nazwa) {
         dodajLista(nazwa);
         cout<<endl<<endl;
@@ -215,7 +249,38 @@ using namespace std;
                 grafMacierz[x][y] = val;
                 grafMacierz[y][x] = val;
             }
+        }
+    }
 
+    void Graf::dodajMacierzPrimaI(string nazwa) {
+        int x,y,val;
+        int ind = 0;
+        fstream file(nazwa,std::ios_base::in);
+        if (!file.is_open()) {
+            cout<<"ERROR"<<endl;
+            return;
+        }
+        file >> x >> y;
+        rozmiar = x;
+        int zab[x];
+        for(int i=0;i<rozmiar;i++) zab[i] = 1;
+        wierz = y;
+        wart = new int[wierz];
+        for(int i=0;i<wierz;i++) wart[i] = 0;
+        macInc = new int*[rozmiar];
+        for(int i=0;i<rozmiar;i++){
+            macInc[i] = new int [y];
+            for(int j=0;j<wierz;j++) macInc[i][j] = 0;
+        }
+        while(file >> x >> y >> val){
+            if(zab[x]<rozmiar&&zab[y]<rozmiar) {
+                macInc[x][ind] = 1;
+                macInc[y][ind] = 1;
+                wart[ind] = val;
+                ind++;
+                zab[x]++;
+                zab[y]++;
+            }
         }
     }
 

@@ -25,6 +25,8 @@ namespace std {
         int *poprzednicy;
         void wyswietl();
         kopiec que;
+
+        void zdijkstrujMacierzI(int start);
     };
 
 } // std

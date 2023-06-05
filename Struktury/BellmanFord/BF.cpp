@@ -8,7 +8,7 @@
 namespace std {
     BF::BF(int choice, int st,string nazwa) {
         zaladujListe(nazwa);
-        graf = Graf('f',nazwa);
+        graf = Graf('m',nazwa);
         switch (choice) {
             case 0:
                 getLista();
@@ -22,7 +22,7 @@ namespace std {
         cout<<endl;
         if(zfordujListe(st)) wyswietl();
         else cout<<"Ujemny cykl"<<endl;
-        if(zfordujMacierz(st)) wyswietl();
+        if(zfordujMacierzI(st)) wyswietl();
         else cout<<"Ujemny cykl"<<endl;
     }
 
@@ -62,7 +62,58 @@ namespace std {
         return true;
     }
 
+    bool BF::zfordujMacierzI(int start) {
+        drogi = new int [graf.rozmiar];
+        poprzednicy = new int [graf.rozmiar];
+        bool res;
+        for(int i=0;i<graf.rozmiar;i++){
+            if(i!=start){
+                drogi[i] = INT_MAX;
+                poprzednicy[i] = -1;
+            } else{
+                drogi[i] = 0;
+                poprzednicy[i] = -1;
+            }
+        }
+        /*
+         *
+         *
 
+         */
+        for(int i=1;i<graf.rozmiar;i++){
+            res = true;
+            for(int j=0;j<graf.rozmiar;j++){
+                for(int k=0;k<graf.wierz;k++){
+                    if(graf.macInc[j][k]==1){
+                        for(int m=0;m<graf.rozmiar;m++){
+                            if(graf.macInc[m][k]==-1&&drogi[j]!=INT_MAX){
+                                if(drogi[m]<=drogi[j]+graf.wart[k]) continue;
+                                res = false;
+                                drogi[m]=drogi[j]+graf.wart[k];
+                                poprzednicy[m] = j;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            if(res) return true;
+        }
+
+        for(int i=0;i<graf.rozmiar;i++){
+            for(int j=0;j<graf.wierz;j++){
+                if(graf.macInc[i][j]==1){
+                    for(int k=0;k<graf.rozmiar;k++){
+                        if(graf.macInc[k][j]==-1){
+                            if(drogi[k]>drogi[i]+graf.wart[j]) return false;
+                        }
+                        //break;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 
     void BF::wyswietl(){
         int* S = new int [graf.rozmiar];

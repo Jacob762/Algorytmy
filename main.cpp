@@ -17,7 +17,7 @@ int main() {
 
 void menu(){
     ::srand(time(NULL));
-    wygenerujGraf(25,5,0.2);
+    wygenerujGraf(10,5,0.8);
     int start;
     int wybor;
     string nazwa;
@@ -88,6 +88,7 @@ void menu(){
 }
 
 void wygenerujGraf(int nody, int krawedzie, float zageszczenie){
+    int kraw;
     bool *tabOd = new bool [nody];
     int wyjscia = floor(zageszczenie*nody);
     for(int i=0;i<nody;i++) tabOd[i]= false;
@@ -96,8 +97,9 @@ void wygenerujGraf(int nody, int krawedzie, float zageszczenie){
         cout<<"ERROR"<<endl;
         return;
     }
+    kraw = nody * wyjscia;
     int x,y,z;
-    file<<nody<<" "<<krawedzie<<endl;
+    file<<nody<<" "<<kraw<<endl;
     for(int i=0;i<nody;i++){
         x = i;
         tabOd[x] = true;

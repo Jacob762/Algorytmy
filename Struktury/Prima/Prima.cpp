@@ -25,7 +25,7 @@ namespace std {
         cout<<endl;
         graf = Graf('k',nazwa);
         cout<<endl;
-        zprimujMacierz(st);
+        zprimujMacierzI(st);
         wyswietl();
     }
 
@@ -44,6 +44,55 @@ namespace std {
                     kolejka.dodaj(graf.grafMacierz[m][j],m,j);
                 }
             }
+            while(true){
+                if(!odwiedzoned[kolejka.table[0].next]){
+                    wynik+=kolejka.table[0].val;
+                    m = kolejka.table[0].next;
+                    list.dodajNaKoniec(new node(kolejka.table[0].id,kolejka.table[0].next, kolejka.table[0].val));
+                    kolejka.usunKorzen();
+                    break;
+                } else{
+                    kolejka.usunKorzen();
+                    if(kolejka.rozmiar==0) break;
+                }
+            }
+            ik++;
+        }
+        cout<<wynik<<endl;
+    }
+
+    /*
+     * if(graf.grafMacierz[m][j]!=-1 && !odwiedzoned[j]){
+                    kolejka.dodaj(graf.grafMacierz[m][j],m,j);
+                }
+     *
+     */
+
+    void Prima::zprimujMacierzI(int start) {
+        int rozmiar = graf.rozmiar;
+        int ik =0;
+        kolejka = kopiec();
+        odwiedzoned = new bool [rozmiar];
+        for(int i=0;i<rozmiar;i++) odwiedzoned[i] = false;
+        int wynik = 0;
+        int m = start;
+        while(ik<rozmiar-1){
+            odwiedzoned[m] = true;
+
+                for(int k=0;k<graf.wierz;k++){
+                    if(graf.macInc[m][k]==1){
+                        for(int l=0;l<graf.rozmiar;l++){
+                            if(l==m) continue;
+                            if(graf.macInc[l][k]==1){
+                                if(!odwiedzoned[l]){
+                                    kolejka.dodaj(graf.wart[k],m,l);
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
             while(true){
                 if(!odwiedzoned[kolejka.table[0].next]){
                     wynik+=kolejka.table[0].val;

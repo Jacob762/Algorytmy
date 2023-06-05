@@ -21,7 +21,7 @@ namespace std {
         zdijkstrujListe(st);
         cout<<endl;
         graf = Graf('m',nazwa);
-        zdijkstrujMacierz(st);
+        zdijkstrujMacierzI(st);
     }
 
     void Dijkstra::zdijkstrujMacierz(int start){
@@ -50,6 +50,57 @@ namespace std {
                 if (drogi[i] > drogi[current] + graf.grafMacierz[current][i] && !odwiedzoned[i] && graf.grafMacierz[current][i]!=-1) {
                     poprzednicy[i] = current;
                     drogi[i] = drogi[current] + graf.grafMacierz[current][i];
+                }
+            }
+            for(int i=0;i<graf.rozmiar;i++){
+                if(drogi[i]!=INT_MAX&&!odwiedzoned[i]) que.dodaj(drogi[i],i,0);
+            }
+        }
+        wyswietl();
+        delete [] drogi;
+        delete [] odwiedzoned;
+        delete [] poprzednicy;
+    }
+
+    void Dijkstra::zdijkstrujMacierzI(int start){
+        drogi = new int [graf.rozmiar];
+        odwiedzoned = new bool [graf.rozmiar];
+        poprzednicy = new int [graf.rozmiar];
+        que = kopiec();
+        int current;
+        for(int i=0;i<graf.rozmiar;i++){
+            if(i!=start){
+                drogi[i] = INT_MAX;
+                odwiedzoned[i] = false;
+                poprzednicy[i] = -1;
+            } else{
+                drogi[i] = 0;
+                odwiedzoned[i] = true;
+                poprzednicy[i] = -1;
+            }
+        }
+        /*
+         for(int i=0;i<graf.rozmiar;i++) {
+            for (int j = 0; j < graf.wierz; j++) cout << graf.macInc[i][j] << " ";
+            cout<<endl;
+        }
+         */
+        que.dodaj(drogi[start],start,0);
+        while(que.rozmiar!=0){
+            current = que.table[0].id;
+            que.usunKorzen();
+            odwiedzoned[current] = true;
+            for(int i=0;i<graf.wierz;i++) {
+                if (graf.macInc[current][i]==1) {
+                    for(int j=0;j<graf.rozmiar;j++){
+                        if(graf.macInc[j][i]==-1){
+                            if(drogi[j] > drogi[current] + graf.wart[i] && !odwiedzoned[j]){
+                                poprzednicy[j] = current;
+                                drogi[j] = drogi[current] + graf.wart[i];
+                            }
+                            break;
+                        }
+                    }
                 }
             }
             for(int i=0;i<graf.rozmiar;i++){
