@@ -25,7 +25,7 @@ using namespace std;
         zkruskaluj(st);
         wyswietl();
         graf = Graf('k',nazwa);
-        init_kolejkaM();
+        init_kolejkaMI();
         size = graf.rozmiar;
         zkruskaluj(st);
         wyswietl();
@@ -75,18 +75,32 @@ using namespace std;
     void Kruskal::init_kolejkaL(){
         kolejka = kopiec();
         listaElement *temp, *temp2;
+        node *temp3;
         for(int i=0;i<graf.rozmiar;i++){
             temp = graf.list[i].head;
             temp2 = graf.listp[i].head;
-            while(temp!=NULL){
-                kolejka.dodaj(temp2->data,i,temp->data);
+            temp3 = graf.nLis[i].head;
+            while(temp3!=NULL){
+                kolejka.dodaj(temp3->val,i,temp3->next);
                 temp = temp->nextEl;
                 temp2 = temp2->nextEl;
+                temp3 = temp3->nextEl;
             }
         }
     }
 
-    void Kruskal::init_kolejkaM(){
+void Kruskal::init_kolejkaM(){
+    kolejka = kopiec();
+    for(int i=0;i<graf.rozmiar;i++){
+        for(int j=0;j<graf.rozmiar;j++){
+            if(graf.grafMacierz[i][j]!=-1){
+                kolejka.dodaj(graf.grafMacierz[i][j],i,j);
+            }
+        }
+    }
+}
+
+    void Kruskal::init_kolejkaMI(){
         int *odw = new int[graf.wierz];
         for(int i=0;i<graf.wierz;i++) odw[i] = false;
         kolejka = kopiec();

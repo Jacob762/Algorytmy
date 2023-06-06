@@ -30,7 +30,7 @@ public:
     int znajdzDowodce(int liczba);
 
     void przypiszDowodce(int u, int v);
-
+    void init_kolejkaMI();
     void init_kolejkaM();
     void init_kolejkaL();
 };

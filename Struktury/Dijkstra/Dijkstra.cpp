@@ -63,6 +63,8 @@ namespace std {
     }
 
     void Dijkstra::zdijkstrujMacierzI(int start){
+        bool dodaned[graf.rozmiar];
+        for(int i=0;i<graf.rozmiar;i++) dodaned[i] = false;
         drogi = new int [graf.rozmiar];
         odwiedzoned = new bool [graf.rozmiar];
         poprzednicy = new int [graf.rozmiar];
@@ -79,12 +81,6 @@ namespace std {
                 poprzednicy[i] = -1;
             }
         }
-        /*
-         for(int i=0;i<graf.rozmiar;i++) {
-            for (int j = 0; j < graf.wierz; j++) cout << graf.macInc[i][j] << " ";
-            cout<<endl;
-        }
-         */
         que.dodaj(drogi[start],start,0);
         while(que.rozmiar!=0){
             current = que.table[0].id;
@@ -104,7 +100,8 @@ namespace std {
                 }
             }
             for(int i=0;i<graf.rozmiar;i++){
-                if(drogi[i]!=INT_MAX&&!odwiedzoned[i]) que.dodaj(drogi[i],i,0);
+                if(drogi[i]!=INT_MAX&&!odwiedzoned[i]&&!dodaned[i]) que.dodaj(drogi[i],i,0);
+                dodaned[i] = true;
             }
         }
         wyswietl();

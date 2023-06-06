@@ -17,7 +17,7 @@ int main() {
 
 void menu(){
     ::srand(time(NULL));
-    wygenerujGraf(10,5,0.8);
+    //wygenerujGraf(20,5,0.8);
     int start;
     int wybor;
     string nazwa;
